@@ -7,7 +7,7 @@ class MyList:
         for i in range(self._size):
             self._data[i] = data[i]
 
-    def count(self):
+    def length(self):
         return self._size
 
     def get(self, index: int):
@@ -38,20 +38,20 @@ class MyList:
     def append(self, item):
         if self.capacity == self._size:
             self._up_capacity()
-        self._data[self._size + 1] = item
+        self._data[self._size] = item
         self._size += 1
 
     def prepend(self, item):
         if self._size == self.capacity:
             self._up_capacity()
-        self._data[1:self._size] = self._data[0:self._size]
+        self._data[1:self._size + 1] = self._data[0:self._size]
         self._data[0] = item
         self._size += 1
 
     def remove(self, item):
         is_include, idx = self.includes(item)
         if is_include:
-            self._data = self._data[0: idx] + self._data[idx + 1: self._size]
+            self._data = self._data[0: idx] + self._data[idx + 1: self.capacity]
             self._size -= 1
 
     def remove_first(self):
@@ -71,7 +71,7 @@ class MyIterator:
     def __init__(self, iter_obj: MyList):
         self._obj = iter_obj
         self._pos = 0
-        self._obj_len = self._obj.count()
+        self._obj_len = self._obj.length()
 
     def first(self):
         self._pos = 0
@@ -99,4 +99,11 @@ class MyIterator:
 
 class MyListIterator(MyList):
     def __iter__(self):
-        return iter(MyIterator(self))
+        return MyIterator(self)
+
+
+ml = MyListIterator(1, 2, 3)
+
+for i in ml:
+    print(i)
+
